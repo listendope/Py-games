@@ -40,9 +40,8 @@ def main():
     print('\n\nObrigado por Jogar!\n\n')
 
             
-
-            
-
+if __name__ == "__main__":
+    main()
 
 
 

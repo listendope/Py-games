@@ -94,7 +94,7 @@ def forca():
             for letra in range(len(palavra)):
                 if palavra[letra] == guess:
                     tam_palavra = troca(tam_palavra, letra, guess)
-                    if guess not in letras_que_foram:
+                    #if guess not in letras_que_foram:
                         #letras_que_foram.append(guess)
                     #erros -= 1
                 if '_' not in tam_palavra:

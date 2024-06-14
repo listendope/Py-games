@@ -95,7 +95,7 @@ def forca():
                 if palavra[letra] == guess:
                     tam_palavra = troca(tam_palavra, letra, guess)
                     if guess not in letras_que_foram:
-                        letras_que_foram.append(guess)
+                        #letras_que_foram.append(guess)
                     #erros -= 1
                 if '_' not in tam_palavra:
                     atualiza_palavra(tam_palavra, erros, letras_que_foram)

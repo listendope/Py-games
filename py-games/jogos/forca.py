@@ -3,7 +3,6 @@ import time
 import random
 
 def inicializa_palavras_forca(escolha):
-    
     facil = [
         "Casa",
         "Gato",
@@ -19,6 +18,7 @@ def inicializa_palavras_forca(escolha):
 
     medio = [
         "Escola",
+        "Barraca",
         "Mercado",
         "Tijolo",
         "Jardim",

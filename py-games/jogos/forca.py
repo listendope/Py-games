@@ -6,9 +6,26 @@ class ForcaUI(GameUI):
     def __init__(self, master):
         super().__init__(master, "Forca")
         self.palavras = {
-            'Fácil': ["Casa", "Gato", "Mesa", "Bola", "Pato"],
-            'Médio': ["Escola", "Barraca", "Mercado", "Tijolo", "Jardim"],
-            'Difícil': ["Helicóptero", "Hipopótamo", "Bibliotecário", "Extraordinário", "Paralelepípedo"]
+            'Fácil': [
+                "Casa", "Gato", "Mesa", "Bola", "Pato", "Livro", "Pente", "Flor",
+                "Fogo", "Muro", "Rato", "Cama", "Vaso", "Pena", "Roda", "Sopa",
+                "Lupa", "Rede", "Tela", "Cubo", "Faca", "Lobo", "Anel", "Pipa"
+            ],
+            'Médio': [
+                "Escola", "Barraca", "Mercado", "Tijolo", "Jardim", "Sorvete",
+                "Janelas", "Martelo", "Borboleta", "Abacaxi", "Cadeira", "Telefone",
+                "Bicicleta", "Guitarra", "Cachorro", "Elefante", "Computador",
+                "Chocolate", "Montanha", "Oceano", "Foguete", "Pintura", "Relógio",
+                "Tesoura"
+            ],
+            'Difícil': [
+                "Helicóptero", "Hipopótamo", "Bibliotecário", "Extraordinário",
+                "Paralelepípedo", "Pneumonia", "Otorrinolaringologista",
+                "Inconstitucional", "Anticonstitucional", "Constitucionalista",
+                "Interdisciplinaridade", "Fotossíntese", "Eletrocardiograma",
+                "Biodiversidade", "Sustentabilidade", "Nanotecnologia",
+                "Epistemologia", "Procrastinação", "Idiossincrasia", "Paradigma"
+            ]
         }
         self.setup_difficulty_selection()
 
@@ -20,7 +37,16 @@ class ForcaUI(GameUI):
         
         # Add the button to return to the main menu
         self.create_button("Voltar ao Menu Principal", self.return_to_main_menu).pack(pady=40)
+        self.create_theme_button()
 
+    def create_theme_button(self):
+        theme_button = tk.Button(self.master, text="🌓", command=self.toggle_theme, width=2, height=1)
+        theme_button.place(relx=1.0, rely=1.0, anchor='se', x=-10, y=-10)
+
+    def toggle_theme(self):
+        self.is_dark_mode = not self.is_dark_mode
+        self.apply_theme()
+        
     def start_game(self, difficulty):
         self.palavra = random.choice(self.palavras[difficulty]).lower()
         self.letras_corretas = set()

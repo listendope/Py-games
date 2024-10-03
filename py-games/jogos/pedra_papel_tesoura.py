@@ -16,7 +16,16 @@ class PedraPapelTesouraUI(GameUI):
         
         # Add the button to return to the main menu
         self.create_button("Voltar ao Menu Principal", self.return_to_main_menu).pack(pady=20)
+        self.create_theme_button()
 
+    def create_theme_button(self):
+        theme_button = tk.Button(self.master, text="🌓", command=self.toggle_theme, width=2, height=1)
+        theme_button.place(relx=1.0, rely=1.0, anchor='se', x=-10, y=-10)
+
+    def toggle_theme(self):
+        self.is_dark_mode = not self.is_dark_mode
+        self.apply_theme()
+        
     def play(self, player_choice):
         computer_choice = random.choice(self.choices)
         result = self.determine_winner(player_choice, computer_choice)

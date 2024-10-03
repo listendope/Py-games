@@ -17,7 +17,16 @@ class JogoDaVelhaUI(GameUI):
         self.create_button("Jogador vs Jogador", lambda: self.set_game_mode("PvP")).pack(pady=5)
         self.create_button("Jogador vs Computador", lambda: self.set_game_mode("PvC")).pack(pady=5)
         self.create_button("Voltar ao Menu Principal", self.return_to_main_menu).pack(pady=20)
+        self.create_theme_button()
 
+    def create_theme_button(self):
+        theme_button = tk.Button(self.master, text="🌓", command=self.toggle_theme, width=2, height=1)
+        theme_button.place(relx=1.0, rely=1.0, anchor='se', x=-10, y=-10)
+
+    def toggle_theme(self):
+        self.is_dark_mode = not self.is_dark_mode
+        self.apply_theme()
+        
     def set_game_mode(self, mode):
         self.game_mode = mode
         self.setup_game()

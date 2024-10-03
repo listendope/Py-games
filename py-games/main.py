@@ -20,7 +20,16 @@ class MainUI(GameUI):
         for game_name, game_func in self.games.items():
             self.create_button(game_name, lambda g=game_func: self.play_game(g)).pack(pady=5)
         self.create_button("Sair", self.quit_game).pack(pady=10)
+        self.create_theme_button()
 
+    def create_theme_button(self):
+        theme_button = tk.Button(self.master, text="🌓", command=self.toggle_theme, width=2, height=1)
+        theme_button.place(relx=1.0, rely=1.0, anchor='se', x=-10, y=-10)
+
+    def toggle_theme(self):
+        self.is_dark_mode = not self.is_dark_mode
+        self.apply_theme()
+        
     def play_game(self, game_func):
         self.master.withdraw()
         game_func()

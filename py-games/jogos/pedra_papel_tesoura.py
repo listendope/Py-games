@@ -13,6 +13,9 @@ class PedraPapelTesouraUI(GameUI):
         self.create_label("Faça sua escolha:").pack(pady=10)
         for choice in self.choices:
             self.create_button(choice, lambda c=choice: self.play(c)).pack(pady=5)
+        
+        # Add the button to return to the main menu
+        self.create_button("Voltar ao Menu Principal", self.return_to_main_menu).pack(pady=20)
 
     def play(self, player_choice):
         computer_choice = random.choice(self.choices)
@@ -30,7 +33,23 @@ class PedraPapelTesouraUI(GameUI):
         else:
             return "Você perdeu!"
 
+    def return_to_main_menu(self):
+        self.master.destroy()
+        from main import main
+        main()
+
 def pedra_papel_tesoura():
     root = tk.Tk()
     game = PedraPapelTesouraUI(root)
+    
+    screen_width = root.winfo_screenwidth()
+    screen_height = root.winfo_screenheight()
+    
+    window_width = 400
+    window_height = 300
+    x = (screen_width - window_width) // 2
+    y = (screen_height - window_height) // 2
+    
+    root.geometry(f'{window_width}x{window_height}+{x}+{y}')
+    
     root.mainloop()

@@ -19,16 +19,32 @@ class MainUI(GameUI):
         self.create_label("Escolha qual jogo quer jogar:").pack(pady=10)
         for game_name, game_func in self.games.items():
             self.create_button(game_name, lambda g=game_func: self.play_game(g)).pack(pady=5)
-        self.create_button("Sair", self.master.quit).pack(pady=10)
+        self.create_button("Sair", self.quit_game).pack(pady=10)
 
     def play_game(self, game_func):
         self.master.withdraw()
         game_func()
         self.master.deiconify()
 
+    def quit_game(self):
+        self.master.quit()  # Stop the mainloop
+        self.master.destroy()  # Destroy the main window
+        exit()  # Exit the Python interpreter
+
 def main():
     root = tk.Tk()
     game = MainUI(root)
+    
+    screen_width = root.winfo_screenwidth()
+    screen_height = root.winfo_screenheight()
+    
+    window_width = 400
+    window_height = 300
+    x = (screen_width - window_width) // 2
+    y = (screen_height - window_height) // 2
+    
+    root.geometry(f'{window_width}x{window_height}+{x}+{y}')
+    
     root.mainloop()
 
 if __name__ == "__main__":

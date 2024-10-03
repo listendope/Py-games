@@ -17,6 +17,9 @@ class ForcaUI(GameUI):
         self.create_label("Selecione uma dificuldade:").pack(pady=10)
         for difficulty in self.palavras.keys():
             self.create_button(difficulty, lambda d=difficulty: self.start_game(d)).pack(pady=5)
+        
+        # Add the button to return to the main menu
+        self.create_button("Voltar ao Menu Principal", self.return_to_main_menu).pack(pady=40)
 
     def start_game(self, difficulty):
         self.palavra = random.choice(self.palavras[difficulty]).lower()
@@ -40,7 +43,7 @@ class ForcaUI(GameUI):
         if letra in self.palavra:
             self.letras_corretas.add(letra)
             if set(self.palavra) == self.letras_corretas:
-                self.show_message("Parabéns! Você ganhou!")
+                self.show_message(f"Parabéns! Você ganhou! A palavra é: {self.palavra}")
                 self.setup_difficulty_selection()
                 return
         else:
@@ -51,8 +54,24 @@ class ForcaUI(GameUI):
                 self.setup_difficulty_selection()
                 return
         self.update_game_ui()
+    
+    def return_to_main_menu(self):
+        self.master.destroy()
+        from main import main
+        main()
 
 def forca():
     root = tk.Tk()
     game = ForcaUI(root)
+    
+    screen_width = root.winfo_screenwidth()
+    screen_height = root.winfo_screenheight()
+    
+    window_width = 400
+    window_height = 300
+    x = (screen_width - window_width) // 2
+    y = (screen_height - window_height) // 2
+    
+    root.geometry(f'{window_width}x{window_height}+{x}+{y}')
+    
     root.mainloop()

@@ -1,41 +1,35 @@
-import os
-import time
-from jogos import pedra_papel_tesoura, forca, jogo_da_velha
+import tkinter as tk
+from jogos.forca import forca
+from jogos.jogo_da_velha import jogo_da_velha
+from jogos.pedra_papel_tesoura import pedra_papel_tesoura
+from jogos.game_ui import GameUI
 
-GAMES = {
-    '1': ('Jogo da Velha', jogo_da_velha.jogo_da_velha),
-    '2': ('Pedra Papel ou Tesoura', pedra_papel_tesoura.pedra_papel_tesoura),
-    '3': ('Forca', forca.forca)
-}
+class MainUI(GameUI):
+    def __init__(self, master):
+        super().__init__(master, "Py-Games")
+        self.games = {
+            'Jogo da Velha': jogo_da_velha,
+            'Pedra Papel ou Tesoura': pedra_papel_tesoura,
+            'Forca': forca
+        }
+        self.setup_main_menu()
 
-def clear_screen():
-    os.system('cls' if os.name == 'nt' else 'clear')
+    def setup_main_menu(self):
+        self.clear_window()
+        self.create_label("Escolha qual jogo quer jogar:").pack(pady=10)
+        for game_name, game_func in self.games.items():
+            self.create_button(game_name, lambda g=game_func: self.play_game(g)).pack(pady=5)
+        self.create_button("Sair", self.master.quit).pack(pady=10)
 
-def display_menu():
-    print('\n\nEscolha qual jogo quer jogar:\n')
-    for key, (game_name, _) in GAMES.items():
-        print(f'{key} - {game_name}')
-    print('\n[APERTE OUTRA TECLA PARA FINALIZAR]\n')
+    def play_game(self, game_func):
+        self.master.withdraw()
+        game_func()
+        self.master.deiconify()
 
 def main():
-    while True:
-        clear_screen()
-        display_menu()
-        
-        opcao = input()
-        
-        if opcao in GAMES:
-            GAMES[opcao][1]()
-        else:
-            clear_screen()
-            print('\n\nSaindo ...\n\n')
-            break
-    
-    time.sleep(1)
-    clear_screen()
-    time.sleep(1)
-    
-    print('\n\nObrigado por Jogar!\n\n')
+    root = tk.Tk()
+    game = MainUI(root)
+    root.mainloop()
 
 if __name__ == "__main__":
     main()

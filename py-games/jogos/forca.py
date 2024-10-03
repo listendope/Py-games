@@ -1,121 +1,58 @@
-import os
-import time
 import random
+from .game_ui import GameUI
+import tkinter as tk
 
-def inicializa_palavras_forca(escolha):
-    facil = [
-        "Casa",
-        "Gato",
-        "Mesa",
-        "Bola",
-        "Pato",
-        "Livro",
-        "Pente",
-        "Flor",
-        "Fogo",
-        "Muro"
-        ]
+class ForcaUI(GameUI):
+    def __init__(self, master):
+        super().__init__(master, "Forca")
+        self.palavras = {
+            'Fácil': ["Casa", "Gato", "Mesa", "Bola", "Pato"],
+            'Médio': ["Escola", "Barraca", "Mercado", "Tijolo", "Jardim"],
+            'Difícil': ["Helicóptero", "Hipopótamo", "Bibliotecário", "Extraordinário", "Paralelepípedo"]
+        }
+        self.setup_difficulty_selection()
 
-    medio = [
-        "Escola",
-        "Barraca",
-        "Mercado",
-        "Tijolo",
-        "Jardim",
-        "Sorvete",
-        "Janelas",
-        "Martelo",
-        "Borboleta",
-        "Abacaxi",
-        "Cadeira"
-    ]
+    def setup_difficulty_selection(self):
+        self.clear_window()
+        self.create_label("Selecione uma dificuldade:").pack(pady=10)
+        for difficulty in self.palavras.keys():
+            self.create_button(difficulty, lambda d=difficulty: self.start_game(d)).pack(pady=5)
 
-    dificil = [
-        "Helicóptero",
-        "Hipopótamo",
-        "Bibliotecário",
-        "Extraordinário",
-        "Paralelepípedo",
-        "Pneumonia",
-        "Otorrinolaringologista",
-        "Inconstitucional",
-        "Anticonstitucional",
-        "Constitucionalista"
-    ]
+    def start_game(self, difficulty):
+        self.palavra = random.choice(self.palavras[difficulty]).lower()
+        self.letras_corretas = set()
+        self.letras_erradas = set()
+        self.tentativas = 6
+        self.update_game_ui()
 
-    match escolha:
-        case '1':
-            return facil, 10
-        case '2':
-            return medio, 8
-        case '3':
-            return dificil, 5
+    def update_game_ui(self):
+        self.clear_window()
+        palavra_atual = ''.join(letra if letra in self.letras_corretas else '_' for letra in self.palavra)
+        self.create_label(f"Palavra: {palavra_atual}").pack(pady=10)
+        self.create_label(f"Letras erradas: {', '.join(self.letras_erradas)}").pack()
+        self.create_label(f"Tentativas restantes: {self.tentativas}").pack()
+        
+        entry = self.create_entry()
+        entry.pack(pady=10)
+        self.create_button("Adivinhar", lambda: self.guess(entry.get().lower())).pack()
 
-def atualiza_palavra(palavra, erros, letras_que_foram):
-    print('Adivinhe a palavra:\n\n')
-    print('\t\t\t\t'+palavra+'         ', erros, '\n\t\t Letras que já foram: ', letras_que_foram)
-
-def troca(palavra, indice, guess):
-    if indice < 0 or indice >= len(palavra):
-        raise IndexError("Índice fora do intervalo da palavra.")
-    return palavra[:indice] + guess + palavra[indice+1:]
+    def guess(self, letra):
+        if letra in self.palavra:
+            self.letras_corretas.add(letra)
+            if set(self.palavra) == self.letras_corretas:
+                self.show_message("Parabéns! Você ganhou!")
+                self.setup_difficulty_selection()
+                return
+        else:
+            self.letras_erradas.add(letra)
+            self.tentativas -= 1
+            if self.tentativas == 0:
+                self.show_message(f"Você perdeu! A palavra era: {self.palavra}")
+                self.setup_difficulty_selection()
+                return
+        self.update_game_ui()
 
 def forca():
-    
-    os.system('cls')
-    letras_que_foram = []
-    while True:
-        os.system('cls')
-        print('\n\nSelecione uma dificuldade:\n')
-        print('\t[1]\t~~ Fácil ~~\n')
-        print('\t[2]\t~~ Médio ~~\n')
-        print('\t[3]\t~~ Difícil ~~\n')
-
-        escolha_do_user = input()
-
-        if escolha_do_user in ['1', '2', '3']:
-            break
-    
-    palavras_nivel, erros = inicializa_palavras_forca(escolha_do_user)
-    palavra = random.choice(palavras_nivel).lower()
-    tam_palavra = len(palavra)*'_'
-    
-    parada = True
-    
-    while parada == True:
-        os.system('cls')
-        atualiza_palavra(tam_palavra, erros, letras_que_foram)
-        
-        while True:
-            guess = input('--> ').lower()
-            if len(guess) == 1:
-                break
-        if guess in palavra:
-            for letra in range(len(palavra)):
-                if palavra[letra] == guess:
-                    tam_palavra = troca(tam_palavra, letra, guess)
-                    #if guess not in letras_que_foram:
-                        #letras_que_foram.append(guess)
-                    #erros -= 1
-                if '_' not in tam_palavra:
-                    atualiza_palavra(tam_palavra, erros, letras_que_foram)
-                    
-                    print('\n\t\tVocê Descobriu a Palavra !!!!')
-                    time.sleep(4) 
-                    
-                    parada = False
-                    break
-        else:
-            print('Letra não está presente!')
-            if guess not in letras_que_foram:
-                letras_que_foram.append(guess)
-            erros -= 1
-            if erros == 0:
-                parada = False
-                atualiza_palavra(palavra, erros, letras_que_foram)
-                print('\n\t\tVocê Perdeu!')
-                time.sleep(4) 
-                break
-            time.sleep(1)
-        
-        
+    root = tk.Tk()
+    game = ForcaUI(root)
+    root.mainloop()

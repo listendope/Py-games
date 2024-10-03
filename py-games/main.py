@@ -1,66 +1,41 @@
 import os
 import time
-from jogos.pedra_papel_tesoura import *
-from jogos.forca import *
-from jogos.jogo_da_velha import *
+from jogos import pedra_papel_tesoura, forca, jogo_da_velha
+
+GAMES = {
+    '1': ('Jogo da Velha', jogo_da_velha.jogo_da_velha),
+    '2': ('Pedra Papel ou Tesoura', pedra_papel_tesoura.pedra_papel_tesoura),
+    '3': ('Forca', forca.forca)
+}
+
+def clear_screen():
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+def display_menu():
+    print('\n\nEscolha qual jogo quer jogar:\n')
+    for key, (game_name, _) in GAMES.items():
+        print(f'{key} - {game_name}')
+    print('\n[APERTE OUTRA TECLA PARA FINALIZAR]\n')
 
 def main():
-    
     while True:
-        os.system('cls')
-
-        print('\n\nEscolha qual jogo quer jogar:\n')
-        print('1 - Jogo da Velha')
-        print('2 - Pedra Papel ou Tesoura')
-        print('3 - Forca\n')
-        print('[APERTE OUTRA TECLA PARA FINALIZAR]\n')
+        clear_screen()
+        display_menu()
         
         opcao = input()
         
-        match opcao:
-            case '1':
-                jogo_da_velha()
-            
-            case '2':
-                pedra_papel_tesoura()
-            
-            case '3':
-                forca()
-            
-            case _:
-                os.system('cls')
-                print('\n\nSaindo ...\n\n')
-                break
-            
+        if opcao in GAMES:
+            GAMES[opcao][1]()
+        else:
+            clear_screen()
+            print('\n\nSaindo ...\n\n')
+            break
     
     time.sleep(1)
-    os.system('cls')
+    clear_screen()
     time.sleep(1)
     
     print('\n\nObrigado por Jogar!\n\n')
 
-            
 if __name__ == "__main__":
     main()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-main()
